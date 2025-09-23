@@ -1,0 +1,1 @@
+[![Envoi de message Discord](https://github.com/Couphyx/Exercice2-3/actions/workflows/main.yml/badge.svg)](https://github.com/Couphyx/Exercice2-3/actions/workflows/main.yml)

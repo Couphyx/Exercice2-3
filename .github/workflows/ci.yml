@@ -1,40 +1,28 @@
-﻿name: CI
+﻿name: Discord Notification
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
+    branches:
+      - dev          # Branche qui déclenche l'action
+  workflow_dispatch: # Pour lancement manuel
 
 jobs:
-  build:
+  discord_message:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '18'
+          python-version: '3.11'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Installer requests
+        run: pip install requests
 
-      # Étape modifiée pour simuler un échec
-      - name: Run tests (simulate fail)
-        run: bash scripts/test-fail.sh
-
-      - name: Notify Discord on success
-        if: success()
-        run: |
-          curl -H "Content-Type: application/json" `
-               -d "{\"content\": \"✅ Build SUCCESS for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-      - name: Notify Discord on failure
-        if: failure()
-        run: |
-          curl -H "Content-Type: application/json" `
-               -d "{\"content\": \"❌ Build FAILED for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Envoyer message Discord
+        run: python script.py
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}

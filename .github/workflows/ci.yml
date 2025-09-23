@@ -21,19 +21,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      # Étape modifiée pour simuler un échec
+      - name: Run tests (simulate fail)
+        run: bash scripts/test-fail.sh
 
       - name: Notify Discord on success
         if: success()
         run: |
           curl -H "Content-Type: application/json" `
-               -d "{\"content\": \"âœ… Build SUCCESS for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
+               -d "{\"content\": \"✅ Build SUCCESS for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
                ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Discord on failure
         if: failure()
         run: |
           curl -H "Content-Type: application/json" `
-               -d "{\"content\": \"âŒ Build FAILED for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
+               -d "{\"content\": \"❌ Build FAILED for $GITHUB_REPOSITORY ($GITHUB_REF)\"}" `
                ${{ secrets.DISCORD_WEBHOOK_URL }}

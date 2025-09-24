@@ -9,9 +9,10 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - name: Récupérer le code
+        uses: actions/checkout@v3
 
-      - name: Lancer le playbook
+      - name: Exécuter Ansible Playbook
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i inventory.ini playbook.yml

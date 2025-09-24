@@ -1,0 +1,25 @@
+name: Deploy Ansible
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Installer Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Copier playbook
+        run: |
+          cp playbook.yml playbook.yml
+          cp inventory.ini inventory.ini
+
+      - name: Lancer le playbook
+        run: ansible-playbook -i inventory.ini playbook.yml

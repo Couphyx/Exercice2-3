@@ -11,15 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Installer Ansible
-        run: |
-          apt update
-          apt install -y ansible
-
-      - name: Copier playbook
-        run: |
-          cp playbook.yml playbook.yml
-          cp inventory.ini inventory.ini
-
       - name: Lancer le playbook
-        run: ansible-playbook -i inventory.ini playbook.yml
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i inventory.ini playbook.yml

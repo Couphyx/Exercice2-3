@@ -1,18 +1,25 @@
 name: Deploy Ansible
 
-# Déclenchement manuel
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
-    runs-on: self-hosted  # ton runner auto-hébergé
+    runs-on: self-hosted
     steps:
-      # Récupérer le dépôt
       - uses: actions/checkout@v3
 
-      # Désactiver la vérification de clé SSH pour éviter les erreurs
-      - name: Lancer le playbook Ansible
+      - name: Installer Ansible
         run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i inventory.ini playbook.yml
+          apt update
+          apt install -y ansible
+
+      - name: Copier playbook
+        run: |
+          cp playbook.yml playbook.yml
+          cp inventory.ini inventory.ini
+
+      - name: Lancer le playbook
+        run: ansible-playbook -i inventory.ini playbook.yml

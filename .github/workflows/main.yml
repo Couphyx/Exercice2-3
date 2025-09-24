@@ -2,28 +2,12 @@ name: Envoi de message Discord
 
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 jobs:
-  send_message:
+  noop:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Vérifier le code
-        uses: actions/checkout@v3
-
-      - name: Configurer Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Installer les dépendances
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Exécuter le script
-        run: python ton_script.py
-        env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+      - name: Ne rien faire
+        run: echo "Workflow désactivé sur main"

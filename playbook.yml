@@ -1,7 +1,7 @@
 ---
 - name: Déploiement via SSH
   hosts: serveurs
-  become: yes
+  become: true
   tasks:
 
     - name: Mettre à jour apt

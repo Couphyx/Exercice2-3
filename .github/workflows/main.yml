@@ -1,6 +1,13 @@
-# .github/workflows/main.yml
 name: Envoi de message Discord
 
 on:
   push:
-    branches-ignore: [main]  # Ignore les pushs sur main
+    branches-ignore:
+      - main
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ne rien faire
+        run: echo "Workflow désactivé sur main"

@@ -1,21 +1,25 @@
-name: Deploy Ansible
+---
+- name: Déploiement via SSH
+  hosts: serveurs
+  become: yes
+  tasks:
 
-on:
-  push:
-    branches:
-      - main
+    - name: Mettre à jour apt
+      apt:
+        update_cache: yes
 
-jobs:
-  deploy:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v3
-      - name: Copier playbook
-        run: |
-          cp playbook.yml playbook.yml
-          cp inventory.ini inventory.ini
+    - name: Installer nginx
+      apt:
+        name: nginx
+        state: present
 
-      - name: Lancer le playboob
-        run: |
-            export ANSIBLE_HOST_KEY_CHECKING=False
-            ansible-playbook -i inventory.ini playbook.yml
+    - name: Démarrer nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Créer page de test
+      copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Déploiement réussi via Ansible SSH !</h1>"

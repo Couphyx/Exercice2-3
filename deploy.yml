@@ -29,7 +29,7 @@
 
     - name: Déployer la ToDoApp
       git:
-        repo: "https://github.com/Couphyx/Exercice2-3.git"
+        repo: "https://github.com/Couphyx/Exercice2-3/tree/main"
         dest: /var/www/html/
         version: main
 

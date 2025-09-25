@@ -1,0 +1,32 @@
+name: 🚀 Déploiement AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Récupérer le code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Installer Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: 🔑 Écrire la clé SSH
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" > aws_key.pem
+          chmod 600 aws_key.pem
+
+      - name: 📡 Lancer le déploiement Ansible
+        run: |
+          ansible-playbook -i inventory_aws.ini deploy.yml
+
+      - name: 🧹 Nettoyer la clé
+        if: always()
+        run: rm -f aws_key.pem

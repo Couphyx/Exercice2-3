@@ -1,0 +1,39 @@
+---
+- name: Déployer ToDoApp sur AWS EC2
+  hosts: aws
+  become: yes
+
+  tasks:
+    - name: Mettre à jour les paquets
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Installer nginx et git
+      apt:
+        name:
+          - nginx
+          - git
+        state: present
+
+    - name: Démarrer et activer nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Supprimer l’ancien site (si existant)
+      file:
+        path: /var/www/html/*
+        state: absent
+
+    - name: Déployer la ToDoApp
+      git:
+        repo: "https://github.com/Couphyx/Exercice2-3.git"
+        dest: /var/www/html/
+        version: main
+
+    - name: Vérifier le fichier index.html
+      copy:
+        content: "<h1>ToDoApp déployée avec Ansible 🚀</h1>"
+        dest: /var/www/html/index.html
